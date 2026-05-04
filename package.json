@@ -1,0 +1,62 @@
+{
+    "name": "itau-pj-dashboard",
+    "version": "1.0.0",
+    "description": "Itaú PJ Dashboard - Case Study for Frontend Engineer Position",
+    "scripts": {
+        "setup": "./scripts/setup-project.sh",
+        "dev": "concurrently \"npm run dev:backend\" \"npm run dev:angular\" \"npm run dev:react\"",
+        "dev:angular": "cd apps/angular-host && npm run start",
+        "dev:react": "cd apps/react-login-remote && npm run dev",
+        "dev:backend": "cd apps/backend && npm run dev:all",
+        "build": "npm run build:angular && npm run build:react",
+        "build:angular": "cd apps/angular-host && npm run build",
+        "build:react": "cd apps/react-login-remote && npm run build",
+        "test": "npm run test:angular && npm run test:react && npm run test:backend",
+        "test:angular": "cd apps/angular-host && npm run test",
+        "test:react": "cd apps/react-login-remote && npm run test",
+        "test:backend": "cd apps/backend && npm run test:all",
+        "test:e2e": "playwright test",
+        "test:coverage": "npm run test -- --coverage",
+        "lint": "npm run lint:angular && npm run lint:react",
+        "lint:angular": "cd apps/angular-host && npm run lint",
+        "lint:react": "cd apps/react-login-remote && npm run lint",
+        "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+        "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+        "worktree:create": "./scripts/create-worktree.sh",
+        "worktree:list": "./scripts/list-worktrees.sh",
+        "worktree:remove": "./scripts/remove-worktree.sh",
+        "diagram": "cd diagrams && python3 aws_diagram.py"
+    },
+    "keywords": [
+        "itau",
+        "pj",
+        "dashboard",
+        "angular",
+        "react",
+        "module-federation",
+        "microservices"
+    ],
+    "author": "Jonathan Lemos",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.47.2",
+        "concurrently": "^9.1.0",
+        "husky": "^9.1.6",
+        "lint-staged": "^15.2.10",
+        "prettier": "^3.3.3",
+        "typescript": "^5.6.3"
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,jsx}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{json,md}": [
+            "prettier --write"
+        ]
+    },
+    "engines": {
+        "node": ">=20.0.0",
+        "npm": ">=10.0.0"
+    }
+}

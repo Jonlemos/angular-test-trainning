@@ -1,0 +1,28 @@
+<mat-sidenav-container class="h-screen bg-gray-50">
+  <mat-sidenav mode="side" opened class="w-64 border-r border-gray-200">
+    <div class="p-4 flex items-center justify-center border-b border-gray-200 h-16">
+      <h1 class="text-xl font-bold text-orange-600">Itaú PJ</h1>
+    </div>
+    <div class="flex flex-col p-4 gap-2">
+      <a mat-button class="justify-start"><mat-icon>dashboard</mat-icon> Dashboard</a>
+      <a mat-button class="justify-start"><mat-icon>payment</mat-icon> Pagamentos</a>
+      <a mat-button class="justify-start"><mat-icon>account_balance</mat-icon> Extratos</a>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="flex flex-col">
+    <mat-toolbar class="bg-white border-b border-gray-200 flex justify-between h-16">
+      <span class="text-lg font-medium text-gray-700">Bem-vindo</span>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-gray-500">{{ authService.user()?.name }}</span>
+        <button mat-icon-button (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+
+    <div class="p-6 flex-1 overflow-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
