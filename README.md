@@ -7,6 +7,7 @@ Este projeto é um case study completo para a posição de Engenheiro de Softwar
 ## 🎯 Visão Geral
 
 Dashboard financeiro para empresas (PJ) com foco em:
+
 - **Growth:** Conversão, engajamento e retenção
 - **Escalabilidade:** Micro-frontends com Module Federation
 - **Performance:** Lazy loading, SSR/SSG, otimizações
@@ -16,10 +17,12 @@ Dashboard financeiro para empresas (PJ) com foco em:
 ## 🏗️ Arquitetura
 
 ### Frontend (Micro-frontends)
+
 - **Angular 18+** (Host) - Dashboard, pagamentos, extratos, renegociação
 - **React 19 + Next.js 15** (Remote) - Componente de login com MFA
 
 ### Backend (Microservices)
+
 - **Auth Service** (Node.js) - Autenticação e autorização
 - **Charge Service** (Node.js) - Gestão de cobranças
 - **Renegotiation Service** (Node.js) - Renegociação de dívidas
@@ -27,18 +30,19 @@ Dashboard financeiro para empresas (PJ) com foco em:
 
 ### Tecnologias
 
-| Camada | Tecnologias |
-|--------|-------------|
-| **Frontend Angular** | Angular 18, TypeScript, RxJS, Signals, Angular Material, Jest |
-| **Frontend React** | React 19, Next.js 15, TypeScript, TanStack Query, Zustand, Shadcn/ui |
-| **Backend** | Node.js 20, Express, JWT, Zod, Jest, Supertest |
-| **Testes** | Jest, Testing Library, Playwright, Axe (a11y) |
-| **CI/CD** | GitHub Actions, AWS S3, CloudFront, Lambda |
-| **Infra** | Terraform, Docker, AWS (S3, CloudFront, API Gateway, Lambda/ECS) |
+| Camada               | Tecnologias                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| **Frontend Angular** | Angular 18, TypeScript, RxJS, Signals, Angular Material, Jest        |
+| **Frontend React**   | React 19, Next.js 15, TypeScript, TanStack Query, Zustand, Shadcn/ui |
+| **Backend**          | Node.js 20, Express, JWT, Zod, Jest, Supertest                       |
+| **Testes**           | Jest, Testing Library, Playwright, Axe (a11y)                        |
+| **CI/CD**            | GitHub Actions, AWS S3, CloudFront, Lambda                           |
+| **Infra**            | Terraform, Docker, AWS (S3, CloudFront, API Gateway, Lambda/ECS)     |
 
 ## 🚀 Quick Start
 
 ### Pré-requisitos
+
 - Node.js 20+
 - npm 10+
 - Git 2.30+
@@ -48,8 +52,8 @@ Dashboard financeiro para empresas (PJ) com foco em:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/itau-pj-dashboard.git
-cd itau-pj-dashboard
+git clone https://github.com/Jonlemos/angular-test-trainning.git
+cd angular-test-trainning
 
 # Execute o setup automático
 npm run setup
@@ -59,6 +63,7 @@ npm run dev
 ```
 
 Aplicações disponíveis em:
+
 - **Angular Host:** http://localhost:4200
 - **React Login:** http://localhost:4201
 - **Auth API:** http://localhost:3001
@@ -67,15 +72,16 @@ Aplicações disponíveis em:
 - **Mock DB:** http://localhost:3004
 
 ## 📁 Estrutura do Projeto
-itau-pj-dashboard/
+
+angular-test-trainning/
 ├── .gemini/ # Configurações do Gemini AI
-│       └── skills/ # Skills customizadas
+│ └── skills/ # Skills customizadas
 ├── apps/
-│   ├── angular-host/ # Angular 18 (host principal)
-│   ├── react-login-remote/ # React 19 + Next.js 15 (login)
-│   └── backend/ # Microservices Node.js
+│ ├── angular-host/ # Angular 18 (host principal)
+│ ├── react-login-remote/ # React 19 + Next.js 15 (login)
+│ └── backend/ # Microservices Node.js
 ├── libs/
-│   └── shared/ # Código compartilhado
+│ └── shared/ # Código compartilhado
 ├── diagrams/ # Diagramas de arquitetura
 ├── docs/ # Documentação técnica
 ├── scripts/ # Scripts auxiliares
@@ -83,10 +89,10 @@ itau-pj-dashboard/
 ├── GEMINI.md # Configuração principal do Gemini
 └── README.md
 
-
 ## 🛠️ Comandos Principais
 
 ### Desenvolvimento
+
 ```bash
 npm run dev                # Inicia todos os serviços
 npm run dev:angular        # Apenas Angular
@@ -95,6 +101,7 @@ npm run dev:backend        # Apenas backend
 ```
 
 ### Build
+
 ```bash
 npm run build              # Build de produção
 npm run build:angular      # Build Angular
@@ -102,6 +109,7 @@ npm run build:react        # Build React
 ```
 
 ### Testes
+
 ```bash
 npm test                   # Todos os testes
 npm run test:unit          # Testes unitários
@@ -110,6 +118,7 @@ npm run test:coverage      # Testes com coverage
 ```
 
 ### Qualidade de Código
+
 ```bash
 npm run lint               # ESLint
 npm run format             # Prettier (format)
@@ -117,6 +126,7 @@ npm run format:check       # Prettier (check)
 ```
 
 ### Git Worktrees
+
 ```bash
 npm run worktree:create feature/nome     # Criar worktree
 npm run worktree:list                    # Listar worktrees
@@ -126,6 +136,7 @@ npm run worktree:remove feature-nome     # Remover worktree
 ## 🔐 Credenciais de Teste
 
 **Login:**
+
 - CPF/CNPJ: `12345678901234`
 - Senha: `password123`
 - Código MFA: `123456`
@@ -133,12 +144,14 @@ npm run worktree:remove feature-nome     # Remover worktree
 ## 🧪 Testes
 
 ### Cobertura Atual
+
 - **Unit Tests:** 85%
 - **Integration Tests:** 70%
 - **E2E Tests:** 100% dos fluxos críticos
 - **Accessibility:** WCAG 2.1 AA compliant
 
 ### Executar Testes
+
 ```bash
 # Unit tests
 npm run test:angular
@@ -163,12 +176,14 @@ npm test
 ## 🚢 Deploy
 
 ### Staging
+
 ```bash
 git push origin main
 # Auto-deploy via GitHub Actions
 ```
 
 ### Production
+
 ```bash
 git tag v1.0.0
 git push origin v1.0.0

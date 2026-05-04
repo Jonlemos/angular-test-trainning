@@ -1,27 +1,31 @@
 # Git Worktree Workflow - Best Practices
 
 ## Overview
+
 This skill defines the Git worktree workflow for the Itaú PJ Dashboard project. Worktrees allow you to work on multiple branches simultaneously without switching contexts, improving productivity and reducing conflicts [web:113][web:117].
 
 ## Why Worktrees Over Branches?
 
 ### Traditional Branches (Problems)
+
 ❌ Need to stash/commit changes before switching  
 ❌ Node_modules conflicts when switching  
 ❌ Build artifacts get mixed  
 ❌ Can't run multiple versions simultaneously  
-❌ Lost context when switching  
+❌ Lost context when switching
 
 ### Worktrees (Benefits)
+
 ✅ Work on multiple features in parallel  
 ✅ Independent node_modules per worktree  
 ✅ Isolated build outputs  
 ✅ Run dev servers side-by-side  
 ✅ Easy to compare implementations  
-✅ Clean separation of concerns  
+✅ Clean separation of concerns
 
 ## Worktree Directory Structure
-itau-pj-dashboard/ # Main repository
+
+angular-test-trainning/ # Main repository
 ├── .git/ # Git metadata (shared)
 ├── apps/ # Main working tree (main branch)
 ├── docs/
@@ -37,7 +41,6 @@ itau-pj-dashboard/ # Main repository
 └── bugfix-auth-timeout/ # Bugfix
 ├── apps/
 └── node_modules/
-
 
 ## Setup Script
 
@@ -208,18 +211,18 @@ if [[ "$response" =~ ^[Yy]$ ]]; then
             exit 1
         fi
     fi
-    
+
     echo -e "${BLUE}Removing worktree...${NC}"
     git worktree remove $WORKTREE_PATH --force
-    
+
     echo -e "${YELLOW}Delete remote branch '$BRANCH_NAME'? (y/N)${NC}"
     read -r delete_branch
-    
+
     if [[ "$delete_branch" =~ ^[Yy]$ ]]; then
         git push origin --delete $BRANCH_NAME 2>/dev/null || echo "Remote branch doesn't exist"
         git branch -D $BRANCH_NAME 2>/dev/null || echo "Local branch doesn't exist"
     fi
-    
+
     echo -e "${GREEN}✓ Worktree removed successfully!${NC}"
 else
     echo "Aborted."
@@ -243,7 +246,7 @@ git worktree list | while IFS= read -r line; do
     # Parse worktree info
     path=$(echo $line | awk '{print $1}')
     branch=$(echo $line | grep -oP '\[\K[^\]]+' || echo "detached")
-    
+
     if [ -d "$path" ]; then
         # Check for uncommitted changes
         cd $path
@@ -253,7 +256,7 @@ git worktree list | while IFS= read -r line; do
             status="(clean)"
         fi
         cd - > /dev/null
-        
+
         echo -e "  📁 $path"
         echo -e "     Branch: $branch $status"
         echo ""
@@ -378,7 +381,7 @@ test/performance-optimization
 {
   "serve": {
     "options": {
-      "port": 4200  // Main: 4200, Worktree 1: 4201, Worktree 2: 4202
+      "port": 4200 // Main: 4200, Worktree 1: 4201, Worktree 2: 4202
     }
   }
 }
@@ -474,14 +477,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       # Install dependencies (same as worktree setup)
       - name: Install dependencies
         run: |
           npm install
           cd apps/angular-host && npm install
           cd ../react-login-remote && npm install
-      
+
       - name: Run tests
         run: npm test
 ```
@@ -513,4 +516,4 @@ git rebase origin/main
 
 ---
 
-*Always use worktrees for parallel development to maintain clean, isolated environments.*
+_Always use worktrees for parallel development to maintain clean, isolated environments._
