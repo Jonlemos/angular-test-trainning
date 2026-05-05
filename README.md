@@ -31,7 +31,7 @@ graph TD
     LoginMFE -->|Login / Refresh| AuthSvc
     Shell -->|Dados de Cobrança| ChargeSvc
     Shell -->|Negociações| RenegSvc
-    
+
     AuthSvc -->|Valida| DB
     ChargeSvc -->|Lê/Escreve| DB
     RenegSvc -->|Lê/Escreve| DB
@@ -39,14 +39,14 @@ graph TD
 
 ### Tecnologias
 
-| Camada               | Tecnologias                                                          |
-| -------------------- | -------------------------------------------------------------------- |
-| **Frontend Angular** | Angular 18, Webpack, RxJS, Signals, Material, Jest                   |
-| **Frontend React**   | React 19, Vite 6, Module Federation, TanStack Query, Vitest          |
-| **Backend**          | Node.js 20, Express, JWT (Refresh Token), Bcrypt, Zod, Jest          |
-| **Testes**           | Jest, Vitest, Testing Library, Playwright, Axe (a11y)                |
-| **CI/CD**            | GitHub Actions, AWS S3, CloudFront, Lambda                           |
-| **Infra**            | Terraform, Docker, AWS (S3, CloudFront, API Gateway)                 |
+| Camada               | Tecnologias                                                 |
+| -------------------- | ----------------------------------------------------------- |
+| **Frontend Angular** | Angular 18, Webpack, RxJS, Signals, Material, Jest          |
+| **Frontend React**   | React 19, Vite 6, Module Federation, TanStack Query, Vitest |
+| **Backend**          | Node.js 20, Express, JWT (Refresh Token), Bcrypt, Zod, Jest |
+| **Testes**           | Jest, Vitest, Testing Library, Playwright, Axe (a11y)       |
+| **CI/CD**            | GitHub Actions, AWS S3, CloudFront, Lambda                  |
+| **Infra**            | Terraform, Docker, AWS (S3, CloudFront, API Gateway)        |
 
 ## 🚀 Quick Start
 
@@ -82,21 +82,23 @@ Aplicações disponíveis em:
 
 ## 📁 Estrutura do Projeto
 
+<pre>
 angular-test-trainning/
-├── .gemini/ # Configurações do Gemini AI
-│ └── skills/ # Skills customizadas
+├── .gemini/                # Configurações do Gemini AI
+│   └── skills/             # Skills customizadas
 ├── apps/
-│ ├── angular-host/ # Angular 18 (host principal)
-│ ├── react-login-remote/ # React 19 + Vite 6 (login)
-│ └── backend/ # Microservices Node.js
+│   ├── angular-host/       # Angular 18 (host principal)
+│   ├── react-login-remote/ # React 19 + Vite 6 (login)
+│   └── backend/            # Microservices Node.js
 ├── libs/
-│ └── shared/ # Código compartilhado
-├── diagrams/ # Diagramas de arquitetura
-├── docs/ # Documentação técnica
-├── scripts/ # Scripts auxiliares
-├── worktrees/ # Git worktrees (isolados)
-├── GEMINI.md # Configuração principal do Gemini
+│   └── shared/             # Código compartilhado
+├── diagrams/               # Diagramas de arquitetura
+├── docs/                   # Documentação técnica
+├── scripts/                # Scripts auxiliares
+├── worktrees/              # Git worktrees (isolados)
+├── GEMINI.md               # Configuração principal do Gemini
 └── README.md
+</pre>
 
 ## 🛠️ Comandos Principais
 
