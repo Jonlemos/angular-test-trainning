@@ -1,0 +1,255 @@
+openapi: 3.0.3
+info:
+  title: Itaú PJ Dashboard API
+  description: API unificada para o ecossistema Itaú PJ (Auth, Charges, Renegotiation).
+  version: 1.0.0
+  contact:
+    name: Itaú PJ Growth Team
+    email: growth@itau.com.br
+
+servers:
+  - url: http://localhost:3001/api/auth
+    description: Auth Microservice
+  - url: http://localhost:3002/api/charges
+    description: Charge Microservice
+  - url: http://localhost:3003/api/renegotiation
+    description: Renegotiation Microservice
+
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Autenticação inicial do usuário
+      description: Valida CPF/CNPJ e senha. Retorna um token JWT ou solicita MFA.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Sucesso (Token ou MFA pendente)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/LoginResponse'
+                  - $ref: '#/components/schemas/MFARequiredResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /mfa/verify:
+    post:
+      tags:
+        - Authentication
+      summary: Verifica o código MFA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MFARequest'
+      responses:
+        '200':
+          description: Autenticação concluída
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /validate:
+    post:
+      tags:
+        - Authentication
+      summary: Valida um token JWT
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token válido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+        '401':
+          description: Token inválido
+
+  /refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Renova o token JWT (Background Polling)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Novo token gerado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Sessão expirada
+
+  /:
+    get:
+      tags:
+        - Charges
+      summary: Lista as cobranças do usuário logado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de cobranças
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Charge'
+    post:
+      tags:
+        - Charges
+      summary: Cria uma nova cobrança
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChargeRequest'
+      responses:
+        '201':
+          description: Cobrança criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - cpfCnpj
+        - password
+      properties:
+        cpfCnpj:
+          type: string
+          pattern: '^\d{11,14}$'
+        password:
+          type: string
+          minLength: 6
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+            cnpj:
+              type: string
+
+    MFARequiredResponse:
+      type: object
+      properties:
+        requiresMFA:
+          type: boolean
+          example: true
+        sessionToken:
+          type: string
+        message:
+          type: string
+
+    MFARequest:
+      type: object
+      required:
+        - code
+        - sessionToken
+      properties:
+        code:
+          type: string
+          pattern: '^\d{6}$'
+        sessionToken:
+          type: string
+
+    ValidateResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        userId:
+          type: string
+
+    Charge:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+        dueDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [pending, paid, expired]
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateChargeRequest:
+      type: object
+      required:
+        - description
+        - amount
+        - dueDate
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+        dueDate:
+          type: string
+          format: date
+
+  responses:
+    UnauthorizedError:
+      description: Credenciais inválidas ou não autorizadas
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  user_message:
+                    type: string

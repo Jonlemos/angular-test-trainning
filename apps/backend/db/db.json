@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "cpfCnpj": "00000000000191",
+      "password": "$2b$10$yELgt5QGfVmtfVbdMwFDyuP7pVpUOdef9vSLMpyQDvH5s/DRv6kxC",
+      "name": "Empresa Demo LTDA",
+      "email": "contato@empresademo.com.br",
+      "cnpj": "00.000.000/0001-91",
+      "requiresMFA": false
+    }
+  ],
+  "charges": [
+    {
+      "id": "1",
+      "userId": "1",
+      "description": "Venda produtos",
+      "amount": 15000.50,
+      "dueDate": "2026-05-15",
+      "status": "pending",
+      "createdAt": "2026-05-01T10:00:00Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "userId": "1",
+      "type": "credit",
+      "amount": 5000.00,
+      "description": "PIX recebido",
+      "date": "2026-05-02T14:30:00Z"
+    }
+  ],
+  "renegotiations": []
+}

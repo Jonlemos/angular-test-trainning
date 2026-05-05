@@ -14,30 +14,39 @@ Dashboard financeiro para empresas (PJ) com foco em:
 - **Qualidade:** Testes automatizados (>80% coverage)
 - **Segurança:** Autenticação JWT, validação de dados, LGPD compliance
 
-## 🏗️ Arquitetura
+### Arquitetura de Sistema
 
-### Frontend (Micro-frontends)
+```mermaid
+graph TD
+    User((Usuário))
+    Shell[Angular Host v18]
+    LoginMFE[React Login MFE v19]
+    AuthSvc[Auth Service - Node.js]
+    ChargeSvc[Charge Service - Node.js]
+    RenegSvc[Renegotiation Service - Node.js]
+    DB[(Mock DB - JSON Server)]
 
-- **Angular 18+** (Host) - Dashboard, pagamentos, extratos, renegociação
-- **React 19 + Next.js 15** (Remote) - Componente de login com MFA
-
-### Backend (Microservices)
-
-- **Auth Service** (Node.js) - Autenticação e autorização
-- **Charge Service** (Node.js) - Gestão de cobranças
-- **Renegotiation Service** (Node.js) - Renegociação de dívidas
-- **DB Service** (JSON Server) - Mock database para desenvolvimento
+    User -->|Acessa| Shell
+    Shell -->|Carrega via Module Federation| LoginMFE
+    LoginMFE -->|Login / Refresh| AuthSvc
+    Shell -->|Dados de Cobrança| ChargeSvc
+    Shell -->|Negociações| RenegSvc
+    
+    AuthSvc -->|Valida| DB
+    ChargeSvc -->|Lê/Escreve| DB
+    RenegSvc -->|Lê/Escreve| DB
+```
 
 ### Tecnologias
 
 | Camada               | Tecnologias                                                          |
 | -------------------- | -------------------------------------------------------------------- |
-| **Frontend Angular** | Angular 18, TypeScript, RxJS, Signals, Angular Material, Jest        |
-| **Frontend React**   | React 19, Next.js 15, TypeScript, TanStack Query, Zustand, Shadcn/ui |
-| **Backend**          | Node.js 20, Express, JWT, Zod, Jest, Supertest                       |
-| **Testes**           | Jest, Testing Library, Playwright, Axe (a11y)                        |
+| **Frontend Angular** | Angular 18, Webpack, RxJS, Signals, Material, Jest                   |
+| **Frontend React**   | React 19, Vite 6, Module Federation, TanStack Query, Vitest          |
+| **Backend**          | Node.js 20, Express, JWT (Refresh Token), Bcrypt, Zod, Jest          |
+| **Testes**           | Jest, Vitest, Testing Library, Playwright, Axe (a11y)                |
 | **CI/CD**            | GitHub Actions, AWS S3, CloudFront, Lambda                           |
-| **Infra**            | Terraform, Docker, AWS (S3, CloudFront, API Gateway, Lambda/ECS)     |
+| **Infra**            | Terraform, Docker, AWS (S3, CloudFront, API Gateway)                 |
 
 ## 🚀 Quick Start
 
@@ -78,7 +87,7 @@ angular-test-trainning/
 │ └── skills/ # Skills customizadas
 ├── apps/
 │ ├── angular-host/ # Angular 18 (host principal)
-│ ├── react-login-remote/ # React 19 + Next.js 15 (login)
+│ ├── react-login-remote/ # React 19 + Vite 6 (login)
 │ └── backend/ # Microservices Node.js
 ├── libs/
 │ └── shared/ # Código compartilhado

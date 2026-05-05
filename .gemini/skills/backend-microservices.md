@@ -180,12 +180,12 @@ const mfaSchema = z.object({
   sessionToken: z.string()
 });
 
-// Mock user database (replace with real DB in production)
 const users = [
   {
     id: '1',
     cpfCnpj: '12345678901234',
-    password: 'password123', // In production: bcrypt hash
+    // Always use bcrypt hashes in all environments
+    password: '$2b$10$yELgt5QGfVmtfVbdMwFDyuP7pVpUOdef9vSLMpyQDvH5s/DRv6kxC', 
     name: 'Empresa Demo LTDA',
     email: 'contato@empresademo.com.br',
     cnpj: '12.345.678/0001-90',
@@ -201,7 +201,10 @@ export const login = async (req, res, next) => {
     // Find user
     const user = users.find(u => u.cpfCnpj === cpfCnpj);
     
-    if (!user || user.password !== password) {
+    // MANDATORY: Use bcrypt.compare for password validation
+    const isValid = user ? await bcrypt.compare(password, user.password) : false;
+
+    if (!isValid) {
       return res.status(401).json({
         error: {
           code: 'INVALID_CREDENTIALS',
@@ -339,7 +342,13 @@ export const validateToken = async (req, res, next) => {
 // apps/backend/auth-service/src/utils/jwt.js
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'itau-pj-secret-key-change-in-production';
+// MANDATORY: Fail fast if JWT_SECRET is not provided
+if (!process.env.JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET environment variable is NOT defined.');
+  process.exit(1);
+}
+
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
 export const generateToken = (payload, expiresIn = JWT_EXPIRES_IN) => {

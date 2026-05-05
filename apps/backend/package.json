@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:all": "concurrently \"npm run dev:db\" \"npm run dev:auth\" \"npm run dev:charge\" \"npm run dev:renegotiation\"",
+    "dev:db": "cd db && npm run dev",
+    "dev:auth": "cd auth-service && npm run dev",
+    "dev:charge": "cd charge-service && npm run dev",
+    "dev:renegotiation": "cd renegotiation-service && npm run dev",
+    "test:all": "cd auth-service && npm run test"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

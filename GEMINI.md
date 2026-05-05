@@ -5,12 +5,12 @@
 This is a **case study project** for Itaú Unibanco's frontend engineer position (Mid-level) focused on **PJ (Pessoa Jurídica) Growth**.
 
 **Tech Stack:**
-- **Host:** Angular 18+ (standalone components, signals, Native Federation)
-- **Remote:** React 19 + Next.js 15 (login micro-frontend)
+- **Host:** Angular 18+ (standalone components, signals, `@angular-architects/module-federation@~18.0.0`, `ngx-build-plus`)
+- **Remote:** React 19 + Vite 6 + `@module-federation/vite@^1.1.0`
 - **Backend:** Node.js microservices (auth, charges, renegotiation)
 - **State Management:** Angular signals + Zustand (React)
-- **Data Fetching:** RxJS + TanStack Query
-- **UI:** Angular Material + Shadcn/ui
+- **Data Fetching:** RxJS + TanStack Query v5
+- **UI:** Angular Material + Tailwind CSS v4
 - **Testing:** Jest + Testing Library
 - **CI/CD:** GitHub Actions
 - **Deploy:** AWS (S3 + CloudFront + API Gateway)
@@ -60,6 +60,7 @@ Load these skills automatically based on context:
 - `.gemini/skills/itau-pj-banking.md` - Banking domain context
 - `.gemini/skills/angular-modern-architecture.md` - Angular 18+ patterns
 - `.gemini/skills/git-worktree-workflow.md` - Git workflow standards
+- `.gemini/skills/itau-pj-sdd.md` - Spec-Driven Development Governance
 
 ### Context-Specific Skills
 
@@ -68,13 +69,13 @@ Load these skills automatically based on context:
 - `@antigravity/angular.md`
 - `@antigravity/typescript.md`
 
-**When working on React/Next.js:**
-- `.gemini/skills/react-nextjs-remote.md`
+**When working on React:**
+- `.gemini/skills/react-vite-remote.md`
 - `@antigravity/react.md`
-- `@antigravity/nextjs.md`
 
 **When working on Module Federation:**
 - `.gemini/skills/module-federation-setup.md`
+- `.gemini/skills/dependency-pins.md` - Critical version pins for react-login-remote
 
 **When working on Backend:**
 - `.gemini/skills/backend-microservices.md`
@@ -89,6 +90,28 @@ Load these skills automatically based on context:
 
 **When working on AWS:**
 - `.gemini/skills/aws-deployment.md`
+
+**When working on Inter-MFE or Success Metrics:**
+- `.gemini/skills/itau-pj-testing-strategy.md`
+- `.gemini/skills/itau-pj-growth-features.md`
+- `.gemini/skills/mfe-inter-communication.md`
+
+---
+
+## ⚠️ Critical Build Rules (React Vite Remote)
+
+These rules are derived from resolved production errors. Violating them will break the build.
+
+| Rule | Rationale |
+|---|---|
+| Use `@module-federation/vite` (Official) | Do NOT use `@originjs/vite-plugin-federation`; it produces ESM-only containers incompatible with Webpack hosts. |
+| Expose a `mount` function | Never expose raw React components to Angular; use a `mount(element, props)` function to isolate rendering. |
+| Manual CSS Injection | Vite's CSS injection in MF often fails in Webpack hosts; use `document.createElement('link')` pointing to `style.css`. |
+| Predictable Asset Names | Set `assetFileNames: 'assets/[name].[ext]'` in Vite `rollupOptions` to disable CSS hashing. |
+| Vite `base` URL | Must set `base: 'http://localhost:4201/'` to ensure asset URLs point back to the remote. |
+| Use `loadRemoteModule` | In Angular, always use `loadRemoteModule({ type: 'module', ... })` for Vite remotes. |
+| Restart Angular on Webpack change | Webpack dev server does not auto-reload `webpack.config.js` changes. |
+| React Remote (Port 4201) before Host | Host needs to fetch `remoteEntry.js` metadata during bootstrap/runtime. |
 
 ---
 
@@ -105,6 +128,16 @@ For every new feature:
 
 See `.gemini/skills/git-worktree-workflow.md` for complete guidelines.
 
+### 2. Spec-Driven Development (SDD)
+
+**Specifications are the single source of truth.**
+
+- **Step 1:** Consult `docs/specs/openapi.yaml` before any API change.
+- **Step 2:** Check `.feature.md` files for behavioral and UX rules.
+- **Step 3:** Ensure code, types, and tests align perfectly with the specs.
+
+See `.gemini/skills/itau-pj-sdd.md` for enforcement rules.
+
 ### 2. Code Quality Standards
 
 **Angular:**
@@ -115,19 +148,21 @@ See `.gemini/skills/git-worktree-workflow.md` for complete guidelines.
 - Write unit tests with Jest
 - Ensure accessibility (WCAG 2.1 AA)
 
-**React:**
-- Use React Server Components when possible
+**React (Vite-based Micro-Frontend):**
+- Use functional components with hooks
 - Implement proper error boundaries
 - Use TypeScript strict mode
 - Follow composition patterns
-- Write unit + integration tests
+- Expose a `mount` function for Angular integration
+- Write unit tests with Vitest
 
 **Backend:**
 - RESTful API design
-- JWT authentication
+- JWT authentication with Refresh Tokens
+- Use `bcrypt` for password hashing (Mandatory)
 - Request validation (Zod)
 - Error handling middleware
-- Comprehensive test coverage
+- Comprehensive test coverage with Jest
 
 ### 3. Testing Requirements
 
@@ -182,6 +217,8 @@ See `.gemini/skills/ci-cd-pipeline.md` for details.
 ## 🔒 Security Guidelines
 
 - Never commit secrets (use environment variables)
+- Use `bcrypt` for all password comparisons
+- Mandate `JWT_SECRET` in all environments (no hardcoded fallbacks)
 - Sanitize all user inputs
 - Implement CSRF protection
 - Use HTTPS only
@@ -255,4 +292,4 @@ AWS_REGION=
 
 ---
 
-*Last updated: May 2, 2026*
+*Last updated: May 4, 2026 — updated with validated Module Federation dependency pins and build rules*

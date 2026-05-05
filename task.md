@@ -1,0 +1,25 @@
+# Task Log - MFE Architecture Modernization
+
+- [x] Standardize Authentication (Bcrypt + JWT Refresh Polling)
+- [x] Migrate React Remote from Next.js to Vite 6
+- [x] Resolve Vite TypeScript Type Conflicts
+- [x] Establish Comprehensive Testing Strategy (Jest + Vitest)
+- [x] Create Distributed AI Skills:
+    - [x] `itau-pj-testing-strategy.md`
+    - [x] `itau-pj-growth-features.md`
+    - [x] `mfe-inter-communication.md`
+- [x] Update Core Skills with Security Patterns:
+    - [x] `angular-modern-architecture.md`
+    - [x] `backend-microservices.md`
+- [x] Update Project Documentation:
+    - [x] `GEMINI.md` (Enforced Plan Mode & Security Rules)
+    - [x] `README.md` (Added Mermaid Diagram & Setup Guide)
+    - [x] `DECISION_LOG.md` (Documented Rationale)
+- [x] Automate Development Workflow:
+    - [x] `setup-project.sh` (Secure Secret Generation)
+    - [x] `create-worktree.sh` (Mandatory Worktree Support)
+- [x] Implement Spec-Driven Development (SDD) Framework:
+    - [x] `docs/specs/openapi.yaml` (API Source of Truth)
+    - [x] `docs/specs/auth-flow.feature.md` (Behavioral Spec)
+    - [x] `.gemini/skills/itau-pj-sdd.md` (SDD Governance Skill)
+    - [x] Update `GEMINI.md` with SDD mandatory workflow.

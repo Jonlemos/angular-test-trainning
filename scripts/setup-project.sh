@@ -68,18 +68,22 @@ export const environment = {
 EOF
 fi
 
-if [ ! -f apps/react-login-remote/.env.local ]; then
-    cat > apps/react-login-remote/.env.local <<EOF
-NEXT_PUBLIC_AUTH_API_URL=http://localhost:3001/api
-NEXT_PUBLIC_REMOTE_URL=http://localhost:4201
+if [ ! -f apps/react-login-remote/.env ]; then
+    cat > apps/react-login-remote/.env <<EOF
+VITE_AUTH_API_URL=http://localhost:3001/api
+VITE_REMOTE_URL=http://localhost:4201
 NODE_ENV=development
 EOF
 fi
 
 if [ ! -f apps/backend/.env ]; then
+    echo -e "${BLUE}Generating secure JWT_SECRET...${NC}"
+    # Generate a random string for development
+    RANDOM_SECRET=$(openssl rand -base64 32 2>/dev/null || echo "itau-dev-$(date +%s)-secret")
+    
     cat > apps/backend/.env <<EOF
 # JWT Configuration
-JWT_SECRET=itau-dev-secret-change-in-production
+JWT_SECRET=$RANDOM_SECRET
 JWT_EXPIRES_IN=24h
 
 # Database
