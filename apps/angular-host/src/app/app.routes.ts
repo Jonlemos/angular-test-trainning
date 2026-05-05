@@ -10,7 +10,19 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
+        loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'charges',
+        loadComponent: () => import('./features/charges/charges.component').then(m => m.ChargesComponent)
+      },
+      {
+        path: 'transactions',
+        loadComponent: () => import('./features/transactions/transactions.component').then(m => m.TransactionsComponent)
+      },
+      {
+        path: 'renegotiations',
+        loadComponent: () => import('./features/renegotiations/renegotiations.component').then(m => m.RenegotiationsComponent)
       },
       {
         path: '',

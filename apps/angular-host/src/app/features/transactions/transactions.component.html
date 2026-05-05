@@ -1,0 +1,52 @@
+<section class="p-6 max-w-5xl mx-auto">
+  <header class="mb-6 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-blue-900">Extrato</h1>
+      <p class="text-slate-500 text-sm mt-1">Histórico completo de movimentações</p>
+    </div>
+    <a routerLink="/dashboard"
+       class="text-sm text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1">
+      ← Voltar ao Dashboard
+    </a>
+  </header>
+
+  @if (transactions().length === 0) {
+    <div class="flex flex-col items-center justify-center py-20 text-slate-400">
+      <svg class="w-16 h-16 mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      <p class="text-lg font-medium">Nenhuma movimentação encontrada</p>
+    </div>
+  } @else {
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <ul class="divide-y divide-slate-100">
+        @for (tx of transactions(); track tx.id) {
+          <li class="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                   [ngClass]="tx.type === 'credit' ? 'bg-green-100' : 'bg-red-100'">
+                <svg class="w-5 h-5" [ngClass]="tx.type === 'credit' ? 'text-green-600' : 'text-red-600'"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  @if (tx.type === 'credit') {
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/>
+                  } @else {
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/>
+                  }
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-slate-800">{{ tx.description }}</p>
+                <p class="text-xs text-slate-400">{{ tx.date | date:'dd/MM/yyyy HH:mm':'UTC' }}</p>
+              </div>
+            </div>
+            <span class="font-bold text-base"
+                  [ngClass]="tx.type === 'credit' ? 'text-green-600' : 'text-red-600'">
+              {{ tx.type === 'credit' ? '+' : '-' }}{{ tx.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            </span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</section>

@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 export interface User {
   id: string;
@@ -11,6 +12,7 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
+  private router = inject(Router);
   private userSignal = signal<User | null>(null);
   private tokenSignal = signal<string | null>(this.getStoredToken());
 
@@ -58,8 +60,8 @@ export class AuthService {
 
   logout() {
     this.clearSession();
-    // In a real app we might redirect to the login remote
-    window.location.reload();
+    // Use Router instead of location.reload() for a SPA feel
+    this.router.navigate(['/login']);
   }
 
   private clearSession() {

@@ -1,35 +1,133 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { loadRemoteModule } from '@angular-architects/native-federation';
+import { Component, OnDestroy, ElementRef, ChangeDetectionStrategy, inject, AfterViewInit, viewChild, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { loadRemoteModule } from '@angular-architects/module-federation';
+import { AuthService } from '../core/auth/auth.service';
+import { TokenRefreshService } from '../core/auth/token-refresh.service';
 
 @Component({
   selector: 'app-react-wrapper',
   standalone: true,
-  template: `<div #reactContainer class="w-full h-screen flex items-center justify-center bg-gray-100">Carregando Login...</div>`,
+  templateUrl: './react-wrapper.component.html',
+  styleUrl: './react-wrapper.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReactWrapperComponent implements OnInit {
-  @ViewChild('reactContainer', { static: true }) container!: ElementRef;
+export class ReactWrapperComponent implements AfterViewInit, OnDestroy {
+  // View Queries
+  private container = viewChild.required<ElementRef>('reactContainer');
+  
+  // Services
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private tokenRefreshService = inject(TokenRefreshService);
+  
+  // State Signals
+  public isLoading = signal(true);
+  public errorMessage = signal<string | null>(null);
+  
+  private root: any = null;
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
+    await this.mountReactApp();
+  }
+
+  private async mountReactApp() {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
     try {
-      const m = await loadRemoteModule('reactLogin', './App').catch(() => null);
+      // ✅ CARREGA O REMOTE PRIMEIRO via loadRemoteModule
+      const remoteModule = await loadRemoteModule({
+        type: 'module',
+        remoteEntry: 'http://localhost:4201/remoteEntry.js',
+        exposedModule: './Login'
+      });
       
-      if (m && m.mount) {
-        m.mount(this.container.nativeElement);
-      } else {
-        // Fallback placeholder if remote is not running
-        this.container.nativeElement.innerHTML = `
-          <div class="p-8 bg-white shadow-lg rounded-xl flex flex-col items-center max-w-md w-full">
-            <h2 class="text-2xl font-bold text-orange-600">Itaú PJ - Login Remoto</h2>
-            <p class="mt-4 text-gray-600 text-center">O micro-frontend de login em React será renderizado aqui via Module Federation.</p>
-            <button onclick="localStorage.setItem('jwt_token', 'mock-token'); localStorage.setItem('user_info', JSON.stringify({id: '1', name: 'Admin Itaú', email: 'admin@itau.com.br'})); window.location.href='/dashboard'" class="mt-6 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition">
-              Simular Login Realizado
-            </button>
-          </div>
-        `;
+      const mountFn = remoteModule.mount;
+      
+      if (!mountFn) {
+        throw new Error('Função mount não encontrada no módulo remoto');
       }
-    } catch (e) {
-      console.error('Error loading react remote', e);
+
+      // 🎨 Injeta e aguarda o CSS do Remote (Evita Flash of Unstyled Content - FOUC)
+      await this.injectRemoteStyles();
+
+      // Renderiza via mount
+      const containerElement = this.container().nativeElement;
+      this.root = mountFn(containerElement, {
+        onLoginSuccess: (token: string, user: any) => {
+          this.authService.login(token, {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            document: user.cnpj || user.cpf
+          });
+          // 🔄 Start 5-minute refresh polling after successful login
+          this.tokenRefreshService.startPolling();
+          this.router.navigate(['/dashboard']);
+        },
+        onLoginError: (error: Error) => {
+          console.error('❌ Erro no login:', error);
+        }
+      });
+
+      // Só remove o loading após o CSS estar pronto e o componente montado
+      this.isLoading.set(false);
+
+    } catch (error: any) {
+      console.error('❌ Erro ao montar React:', error);
+      this.isLoading.set(false);
+      this.errorMessage.set(error.message || 'Erro desconhecido ao carregar o sistema.');
+    }
+  }
+
+  private injectRemoteStyles(): Promise<void> {
+    return new Promise((resolve) => {
+      const existingLink = document.getElementById('react-login-css') as HTMLLinkElement;
+      
+      // Se o link já existe, verifica se já carregou
+      if (existingLink) {
+        // Verifica se as regras de CSS já estão acessíveis (indica que carregou)
+        try {
+          if (existingLink.sheet && existingLink.sheet.cssRules) {
+            resolve();
+            return;
+          }
+        } catch (e) {
+          // Cross-origin pode barrar cssRules, então usamos onload como fallback
+        }
+        
+        existingLink.onload = () => resolve();
+        existingLink.onerror = () => resolve();
+        return;
+      }
+
+      const link = document.createElement('link');
+      link.id = 'react-login-css';
+      link.rel = 'stylesheet';
+      link.href = 'http://localhost:4201/assets/style.css';
+      
+      link.onload = () => {
+        console.log('🎨 CSS do Remote carregado com sucesso');
+        resolve();
+      };
+      
+      link.onerror = () => {
+        console.warn('⚠️ Falha ao carregar CSS do Remote, procedendo sem estilos externos');
+        resolve(); // Resolvemos de qualquer forma para não travar o app
+      };
+
+      document.head.appendChild(link);
+    });
+  }
+
+  public retry() {
+    this.mountReactApp();
+  }
+
+  ngOnDestroy() {
+    this.tokenRefreshService.stopPolling();
+    if (this.root) {
+      this.root.unmount();
     }
   }
 }
