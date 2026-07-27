@@ -59,11 +59,11 @@ function LoginScreen({ onLoginSuccess, onLoginError }: LoginProps) {
       <Card className="w-full max-w-md shadow-2xl border-t-4 border-primary transition-all duration-300">
         <CardHeader className="space-y-1 text-center">
           <div className="mx-auto bg-secondary text-white font-bold text-2xl w-14 h-14 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-            Itaú
+            Banco
           </div>
           <CardTitle className="text-2xl text-secondary flex items-center justify-center gap-2">
             {mfaRequired && <ShieldCheck className="w-6 h-6 text-primary" />}
-            {mfaRequired ? 'Segurança' : 'Acesso PJ'}
+            {mfaRequired ? 'Segurança' : 'Acesso Banco PJ'}
           </CardTitle>
           <CardDescription>
             {mfaRequired 

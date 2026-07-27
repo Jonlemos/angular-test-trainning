@@ -1,4 +1,4 @@
-# Arquitetura do Sistema - Itaú PJ Dashboard
+# Arquitetura do Sistema - Banco PJ Dashboard
 
 ## Visão Geral
 O projeto segue uma arquitetura de **Micro-frontends (MFE)** com um **Backend de Microserviços**. O objetivo é permitir que times diferentes trabalhem em partes distintas do dashboard com independência tecnológica e ciclos de deploy separados.
@@ -35,7 +35,7 @@ O projeto segue uma arquitetura de **Micro-frontends (MFE)** com um **Backend de
 
 ### Comunicação Inter-MFE
 - **Sincronização via Storage:** Uso de `storage events` para reagir a mudanças de sessão em diferentes camadas.
-- **Custom Events:** Disparo de eventos nativos do browser (`itau-pj:*`) para ações globais.
+- **Custom Events:** Disparo de eventos nativos do browser (`banco-pj:*`) para ações globais.
 
 ---
 

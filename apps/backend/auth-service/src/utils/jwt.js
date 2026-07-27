@@ -9,16 +9,16 @@ const JWT_EXPIRES_IN = process.env['JWT_EXPIRES_IN'] || '24h';
 export const generateToken = (payload, expiresIn = JWT_EXPIRES_IN) => {
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn,
-    issuer: 'itau-pj-api',
-    audience: 'itau-pj-dashboard'
+    issuer: 'banco-pj-api',
+    audience: 'banco-pj-dashboard'
   });
 };
 
 export const verifyToken = (token) => {
   try {
     return jwt.verify(token, JWT_SECRET, {
-      issuer: 'itau-pj-api',
-      audience: 'itau-pj-dashboard'
+      issuer: 'banco-pj-api',
+      audience: 'banco-pj-dashboard'
     });
   } catch (error) {
     throw new Error('Invalid token');

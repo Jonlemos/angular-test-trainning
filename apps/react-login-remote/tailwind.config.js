@@ -12,7 +12,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        itau: {
+        brand: {
           orange: "#EC7000",
           blue: "#003399",
           gray: "#5e6770",

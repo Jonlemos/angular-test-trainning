@@ -28,7 +28,7 @@
         "diagram": "cd diagrams && python3 aws_diagram.py"
     },
     "keywords": [
-        "itau",
+        "banco",
         "pj",
         "dashboard",
         "angular",

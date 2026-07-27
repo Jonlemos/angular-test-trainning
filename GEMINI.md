@@ -1,8 +1,8 @@
-# Itaú PJ Dashboard - Gemini AI Agent Configuration
+# Banco PJ Dashboard - Gemini AI Agent Configuration
 
 ## 🎯 Project Context
 
-This is a **case study project** for Itaú Unibanco's frontend engineer position (Mid-level) focused on **PJ (Pessoa Jurídica) Growth**.
+This is a **case study project** for Banco's frontend engineer position (Mid-level) focused on **PJ (Pessoa Jurídica) Growth**.
 
 **Tech Stack:**
 - **Host:** Angular 18+ (standalone components, signals, `@angular-architects/module-federation@~18.0.0`, `ngx-build-plus`)
@@ -57,10 +57,10 @@ Before starting any task, you MUST ask about:
 Load these skills automatically based on context:
 
 ### Core Skills (Always Active)
-- `.gemini/skills/itau-pj-banking.md` - Banking domain context
+- `.gemini/skills/banco-pj-banking.md` - Banking domain context
 - `.gemini/skills/angular-modern-architecture.md` - Angular 18+ patterns
 - `.gemini/skills/git-worktree-workflow.md` - Git workflow standards
-- `.gemini/skills/itau-pj-sdd.md` - Spec-Driven Development Governance
+- `.gemini/skills/banco-pj-sdd.md` - Spec-Driven Development Governance
 
 ### Context-Specific Skills
 
@@ -92,8 +92,8 @@ Load these skills automatically based on context:
 - `.gemini/skills/aws-deployment.md`
 
 **When working on Inter-MFE or Success Metrics:**
-- `.gemini/skills/itau-pj-testing-strategy.md`
-- `.gemini/skills/itau-pj-growth-features.md`
+- `.gemini/skills/banco-pj-testing-strategy.md`
+- `.gemini/skills/banco-pj-growth-features.md`
 - `.gemini/skills/mfe-inter-communication.md`
 
 ---
@@ -136,7 +136,7 @@ See `.gemini/skills/git-worktree-workflow.md` for complete guidelines.
 - **Step 2:** Check `.feature.md` files for behavioral and UX rules.
 - **Step 3:** Ensure code, types, and tests align perfectly with the specs.
 
-See `.gemini/skills/itau-pj-sdd.md` for enforcement rules.
+See `.gemini/skills/banco-pj-sdd.md` for enforcement rules.
 
 ### 2. Code Quality Standards
 
@@ -187,7 +187,7 @@ See `.gemini/skills/itau-pj-sdd.md` for enforcement rules.
 ### Environment Structure
 - **dev:** Feature branches (deployed to dev.example.com)
 - **staging:** Main branch (deployed to staging.example.com)
-- **production:** Release tags (deployed to pj.itau.com.br)
+- **production:** Release tags (deployed to pj.banco.com.br)
 
 ### CI/CD Pipeline
 - Run tests on every commit
@@ -201,7 +201,7 @@ See `.gemini/skills/ci-cd-pipeline.md` for details.
 ## 🎨 UI/UX Guidelines
 
 ### Design System
-- Follow Itaú's design tokens
+- Follow Banco's design tokens
 - Ensure mobile-first responsive design
 - Implement dark mode support
 - Maintain 4.5:1 minimum contrast ratio
@@ -262,7 +262,7 @@ AWS_REGION=
 
 - [Angular Modern Architecture](https://blog.angular.dev)
 - [Module Federation](https://www.angulararchitects.io/blog/micro-frontends-with-modern-angular)
-- [Itaú Tech Blog](https://medium.com/itau-tech)
+- [Blog de Tecnologia](https://medium.com/itau-tech)
 
 ---
 

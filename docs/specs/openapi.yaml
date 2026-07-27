@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
-  title: Itaú PJ Dashboard API
-  description: API unificada para o ecossistema Itaú PJ (Auth, Charges, Renegotiation).
+  title: Banco PJ Dashboard API
+  description: API unificada para o ecossistema Banco PJ (Auth, Charges, Renegotiation).
   version: 1.0.0
   contact:
-    name: Itaú PJ Growth Team
-    email: growth@itau.com.br
+    name: Banco PJ Growth Team
+    email: growth@bancopj.com.br
 
 servers:
   - url: http://localhost:3001/api/auth
